@@ -119,7 +119,7 @@ Templates
 ### 1. Clone Repository
 
 ```bash
-git clone https://github.com/sandy789456-cyber/ReadingManagement.git
+git clone https://github.com/sandy789456-cyber/01ReadingManagementPlatform.git
 
 cd 專案名稱
 ```
