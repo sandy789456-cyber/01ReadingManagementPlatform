@@ -1,4 +1,4 @@
-# 📚 閱讀管理平台 (Reading Management System)
+# 📚 閱讀管理平台 (Reading Management Platform)
 
 ## 專案介紹
 
