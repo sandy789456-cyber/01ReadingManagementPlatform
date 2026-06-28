@@ -1,0 +1,70 @@
+{# delete_record.html：刪除閱讀紀錄前的確認頁。 #}
+{# 本檔只加入說明註解，不更動任何畫面或程式邏輯。 #}
+{% extends "base.html" %}
+
+{% block title %}
+刪除閱讀紀錄
+{% endblock %}
+
+{% block content %}
+
+{# content 區塊：此區內容會被放入 base.html 的 <main> 內。 #}
+
+<div class="form-card">
+
+    <h2>🗑️ 刪除閱讀紀錄</h2>
+
+    <p>
+        確定要刪除這筆閱讀紀錄嗎？
+    </p>
+
+    <div class="book-info">
+
+        <p>
+            <strong>讀者：</strong>
+            {{ record.reader_name }}
+        </p>
+
+        <p>
+            <strong>書名：</strong>
+            {{ record.book.title }}
+        </p>
+
+        <p>
+            <strong>閱讀心得：</strong>
+        </p>
+
+        <p>
+            {{ record.note }}
+        </p>
+
+    </div>
+
+    <div class="warning-box">
+        ⚠️ 刪除後將無法復原，請確認後再執行。
+    </div>
+
+    <br>
+
+    {# 表單使用 POST，搭配 csrf_token 防止跨站請求偽造。 #}
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <div class="book-actions">
+
+            <button
+                type="submit"
+                class="btn btn-danger"
+            >
+                確認刪除
+            </button>
+
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

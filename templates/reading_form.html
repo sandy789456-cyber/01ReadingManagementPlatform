@@ -1,0 +1,93 @@
+{# reading_form.html：會員提交閱讀心得與閱讀進度的頁面。 #}
+{# 本檔只加入說明註解，不更動任何畫面或程式邏輯。 #}
+{% extends "base.html" %}
+
+{% block title %}
+閱讀學習單
+{% endblock %}
+
+{% block content %}
+
+{# content 區塊：此區內容會被放入 base.html 的 <main> 內。 #}
+
+<div class="form-card">
+
+    <h2>📖 閱讀學習單</h2>
+
+    <div class="book-info">
+
+        <h3>{{ book.title }}</h3>
+
+        <p>
+            {{ book.summary }}
+        </p>
+
+        <p class="points">
+            完成提交可獲得
+            {{ book.reward_points }}
+            點
+        </p>
+
+    </div>
+
+    {# 表單使用 POST，搭配 csrf_token 防止跨站請求偽造。 #}
+    <form method="POST">
+        {% csrf_token %}
+
+        <p>
+            <strong>讀者：</strong>
+            {{ request.user.username }}
+        </p>
+
+        <p>
+            閱讀進度：
+            <span id="progressValue">
+                {{ record.progress }}
+            </span> %
+        </p>
+
+        <input
+            type="range"
+            id="progressSlider"
+            name="progress"
+            min="0"
+            max="100"
+            value="{{ record.progress }}"
+        >
+
+        <p>
+            閱讀心得（50 ~ 200字）
+        </p>
+
+        <textarea
+            name="note"
+            rows="8"
+            minlength="50"
+            maxlength="200"
+            required
+        ></textarea>
+
+        <button type="submit">
+            提交閱讀心得
+        </button>
+
+
+
+    </form>
+
+</div>
+
+{# JavaScript：即時更新滑桿旁顯示的閱讀進度百分比。 #}
+<script>
+
+const slider = document.getElementById("progressSlider");
+const progressValue = document.getElementById("progressValue");
+
+slider.addEventListener("input", function() {
+    progressValue.textContent = this.value;
+});
+
+</script>
+
+{% endblock %}
+

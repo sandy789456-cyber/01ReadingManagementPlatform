@@ -1,0 +1,68 @@
+{# dashboard.html：顯示登入會員的閱讀統計與最新上架書籍。 #}
+{# 本檔只加入說明註解，不更動任何畫面或程式邏輯。 #}
+{% extends "base.html" %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+
+{# content 區塊：此區內容會被放入 base.html 的 <main> 內。 #}
+
+<h2>
+    👋 歡迎回來，{{ request.user.username }}
+</h2>
+
+<p>
+    這裡是您的閱讀管理中心
+</p>
+
+<div class="dashboard-cards">
+
+    <div class="stat-card">
+        <h3>📚 書籍總數</h3>
+        <div class="number">
+            {{ total_books }}
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <h3>📖 我的閱讀紀錄</h3>
+        <div class="number">
+            {{ my_record_count }}
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <h3>🏆 我的總點數</h3>
+        <div class="number">
+            {{ my_total_points }}
+        </div>
+    </div>
+
+</div>
+
+<hr>
+
+<h3>最新上架書籍</h3>
+
+<div class="latest-books">
+
+    {% for book in latest_books %}
+
+        <div class="latest-book-card">
+            <strong>{{ book.title }}</strong>
+            <br>
+            {{ book.author }}
+        </div>
+
+    {% empty %}
+
+        <p>目前尚無書籍資料</p>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}

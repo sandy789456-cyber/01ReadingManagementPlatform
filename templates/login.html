@@ -1,0 +1,38 @@
+{# login.html：會員登入頁，使用 Django 內建登入表單。 #}
+{# 本檔只加入說明註解，不更動任何畫面或程式邏輯。 #}
+{% extends "base.html" %}
+
+{% block title %}
+會員登入
+{% endblock %}
+
+{% block content %}
+
+{# content 區塊：此區內容會被放入 base.html 的 <main> 內。 #}
+
+<div class="form-card">
+
+    <h2>會員登入</h2>
+
+    {# 表單使用 POST，搭配 csrf_token 防止跨站請求偽造。 #}
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <button type="submit">
+            登入
+        </button>
+    </form>
+
+    <p>
+        還沒有帳號？
+        <a href="{% url 'register' %}">註冊</a>
+    </p>
+
+</div>
+
+
+
+{% endblock %}
+
+

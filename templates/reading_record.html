@@ -1,0 +1,179 @@
+{# reading_record.html：管理員查看所有讀者閱讀紀錄，支援搜尋與分頁。 #}
+{# 本檔只加入說明註解，不更動任何畫面或程式邏輯。 #}
+{% extends "base.html" %}
+
+{% block title %}
+總體閱讀紀錄
+{% endblock %}
+
+{% block content %}
+
+{# content 區塊：此區內容會被放入 base.html 的 <main> 內。 #}
+
+<h2>📋 總體閱讀紀錄</h2>
+
+<form method="GET" class="search-bar">
+
+    <input
+        type="text"
+        name="keyword"
+        placeholder="搜尋讀者姓名、書名或心得"
+        value="{{ keyword }}"
+    >
+
+    <select name="per_page">
+        <option value="5" {% if per_page == "5" %}selected{% endif %}>
+            5 筆
+        </option>
+
+        <option value="10" {% if per_page == "10" %}selected{% endif %}>
+            10 筆
+        </option>
+
+        <option value="15" {% if per_page == "15" %}selected{% endif %}>
+            15 筆
+        </option>
+    </select>
+
+    <button type="submit">
+        搜尋
+    </button>
+
+    <a
+        href="{% url 'reading_record' %}"
+        class="btn btn-secondary"
+    >
+        清除
+    </a>
+
+</form>
+
+<p class="record-summary">
+    共有 {{ total_records }} 筆紀錄
+</p>
+
+
+
+<br><br>
+
+<div class="table-wrapper">
+
+    <table class="data-table">
+
+        <tr>
+            <th>編號</th>
+            <th>讀者姓名</th>
+            <th>書名</th>
+            <th>閱讀心得</th>
+            <th>閱讀進度</th>
+            <th>是否完成</th>
+            <th>獲得點數</th>
+            <th>提交時間</th>
+            <th>操作</th>
+        </tr>
+
+        {# page_obj 是分頁後的閱讀紀錄資料，逐筆產生表格列。 #}
+        {% for record in page_obj %}
+
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ record.reader_name }}</td>
+            <td>{{ record.book.title }}</td>
+            <td>{{ record.note }}</td>
+            <td>{{ record.progress }}%</td>
+
+            <td>
+                {% if record.is_completed %}
+                    <span class="badge badge-success">
+                        已完成
+                    </span>
+                {% else %}
+                    <span class="badge badge-muted">
+                        未完成
+                    </span>
+                {% endif %}
+            </td>
+
+            <td>{{ record.earned_points }}</td>
+            <td>{{ record.created_at }}</td>
+
+            <td>
+                <div class="table-actions">
+                    <a
+                        href="{% url 'edit_record' record.id %}"
+                        class="btn btn-secondary"
+                    >
+                        編輯
+                    </a>
+
+                    <a
+                        href="{% url 'delete_record' record.id %}"
+                        class="btn btn-danger"
+                    >
+                        刪除
+                    </a>
+                </div>
+            </td>
+        </tr>
+
+        {% empty %}
+
+        <tr>
+            <td colspan="9">
+                目前沒有閱讀紀錄
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</div>
+
+<div class="pagination">
+
+    {% if page_obj.has_previous %}
+
+        <a
+            href="?page=1&keyword={{ keyword }}&per_page={{ per_page }}"
+            class="btn btn-secondary"
+        >
+            第一頁
+        </a>
+
+        <a
+            href="?page={{ page_obj.previous_page_number }}&keyword={{ keyword }}&per_page={{ per_page }}"
+            class="btn btn-secondary"
+        >
+            上一頁
+        </a>
+
+    {% endif %}
+
+    <span>
+        第 {{ page_obj.number }} 頁 /
+        共 {{ page_obj.paginator.num_pages }} 頁
+    </span>
+
+    {% if page_obj.has_next %}
+
+        <a
+            href="?page={{ page_obj.next_page_number }}&keyword={{ keyword }}&per_page={{ per_page }}"
+            class="btn btn-secondary"
+        >
+            下一頁
+        </a>
+
+        <a
+            href="?page={{ page_obj.paginator.num_pages }}&keyword={{ keyword }}&per_page={{ per_page }}"
+            class="btn btn-secondary"
+        >
+            最後一頁
+        </a>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
+

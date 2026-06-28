@@ -1,0 +1,90 @@
+{# edit_book.html：管理員編輯書籍資料的表單頁。 #}
+{# 本檔只加入說明註解，不更動任何畫面或程式邏輯。 #}
+{% extends "base.html" %}
+
+{% block title %}
+編輯書籍
+{% endblock %}
+
+{% block content %}
+
+{# content 區塊：此區內容會被放入 base.html 的 <main> 內。 #}
+
+<div class="form-card">
+
+    <h2>✏️ 編輯書籍</h2>
+
+    {# 表單使用 POST，搭配 csrf_token 防止跨站請求偽造。 #}
+    <form method="post">
+        {% csrf_token %}
+
+        <p>
+            書名
+            <input
+                type="text"
+                name="title"
+                value="{{ book.title }}"
+                required
+            >
+        </p>
+
+        <p>
+            作者
+            <input
+                type="text"
+                name="author"
+                value="{{ book.author }}"
+                required
+            >
+        </p>
+
+        <p>
+            分類
+            <input
+                type="text"
+                name="category"
+                value="{{ book.category }}"
+            >
+        </p>
+
+        <p>
+            獎勵點數
+            <input
+                type="number"
+                name="reward_points"
+                value="{{ book.reward_points }}"
+                min="0"
+            >
+        </p>
+
+        <p>
+            封面網址
+            <input
+                type="url"
+                name="cover_url"
+                value="{{ book.cover_url }}"
+            >
+        </p>
+
+        <p>
+            內容摘要
+        </p>
+
+        <textarea
+            name="summary"
+            rows="8"
+        >{{ book.summary }}</textarea>
+
+        <br>
+
+        <button type="submit">
+            儲存修改
+        </button>
+
+
+    </form>
+
+</div>
+
+{% endblock %}
+

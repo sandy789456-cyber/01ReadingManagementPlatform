@@ -1,0 +1,98 @@
+{# book_list.html：顯示書籍列表，並提供會員提交閱讀單、管理員編輯/刪除書籍的入口。 #}
+{# 本檔只加入說明註解，不更動任何畫面或程式邏輯。 #}
+{% extends "base.html" %}
+
+{% block title %}
+書籍列表
+{% endblock %}
+
+{% block content %}
+
+{# content 區塊：此區內容會被放入 base.html 的 <main> 內。 #}
+
+<div class="hero">
+    <h1>📚 閱讀趣</h1>
+
+    <p>
+        閱讀一本好書，累積知識與學習點數
+    </p>
+
+    <div class="hero-stats">
+        目前共有 {{ books|length }} 本推薦書籍
+    </div>
+</div>
+
+<div class="book-container">
+
+    {# 逐筆顯示後端傳入的 books 資料。 #}
+    {% for book in books %}
+
+    <div class="book-card">
+
+        <div class="serial-number">
+            No. {{ forloop.counter }}
+        </div>
+
+        {% if book.cover_url %}
+            <img src="{{ book.cover_url }}" alt="{{ book.title }}">
+        {% endif %}
+
+        <h2>{{ book.title }}</h2>
+
+        <p>
+            <strong>作者：</strong>{{ book.author }}
+        </p>
+
+        <p>
+            <strong>分類：</strong>{{ book.category }}
+        </p>
+
+        <p>
+            {{ book.summary }}
+        </p>
+
+        <p class="points">
+            完成閱讀可獲得 {{ book.reward_points }} 點
+        </p>
+
+        <div class="book-actions">
+
+            <a
+                class="btn"
+                href="{% url 'reading_form' book.id %}"
+            >
+                提交閱讀單
+            </a>
+
+            {# 管理員才會看到新增、編輯、刪除與管理功能。 #}
+            {% if request.user.is_staff %}
+
+                <a
+                    class="btn btn-secondary"
+                    href="{% url 'edit_book' book.id %}"
+                >
+                    編輯
+                </a>
+
+                <a
+                    class="btn btn-danger"
+                    href="{% url 'delete_book' book.id %}"
+                >
+                    刪除
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+    {% empty %}
+
+        <p>目前沒有圖書資料。</p>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}
